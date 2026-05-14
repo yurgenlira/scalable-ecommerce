@@ -24,3 +24,9 @@ The application exposes a health endpoint at `GET /up`.
 
 This repository follows Conventional Commits:
 `feat | fix | docs | style | refactor | perf | test | chore | ci | build`.
+
+## Continuous integration
+
+Every pull request runs Pint, Larastan, Pest, a dependency audit and a secret
+scan. Enable branch protection on `main` requiring the `ci` status check to pass
+before merging.

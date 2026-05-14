@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  ci:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.5'
+          extensions: mbstring, bcmath
+          coverage: none
+
+      - name: Install dependencies
+        working-directory: app
+        run: composer install --prefer-dist --no-interaction --no-progress
+
+      - name: Prepare application
+        working-directory: app
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+
+      - name: Lint (Pint)
+        working-directory: app
+        run: ./vendor/bin/pint --test
+
+      - name: Static analysis (Larastan)
+        working-directory: app
+        run: ./vendor/bin/phpstan analyse
+
+      - name: Tests (Pest)
+        working-directory: app
+        run: ./vendor/bin/pest
+
+      - name: Dependency audit (SCA)
+        working-directory: app
+        run: composer audit
+
+      - name: Secret scan (gitleaks)
+        uses: gitleaks/gitleaks-action@v3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
