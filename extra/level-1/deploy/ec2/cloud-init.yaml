@@ -1,0 +1,36 @@
+#cloud-config
+apt:
+  sources:
+    ondrej-php:
+      source: "ppa:ondrej/php"
+
+packages:
+  - nginx
+  - unzip
+  - php8.5-cli
+  - php8.5-fpm
+  - php8.5-pgsql
+  - php8.5-mbstring
+  - php8.5-xml
+  - php8.5-bcmath
+  - php8.5-curl
+  - php8.5-zip
+  - certbot
+  - python3-certbot-nginx
+
+write_files:
+  - path: /etc/nginx/sites-available/app
+    encoding: b64
+    content: ${nginx_conf_b64}
+
+runcmd:
+  # Composer
+  - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+  # CloudWatch Agent (.deb, not in apt)
+  - curl -fsSL https://amazoncloudwatch-agent.s3.amazonaws.com/ubuntu/amd64/latest/amazon-cloudwatch-agent.deb -o /tmp/cwagent.deb
+  - dpkg -i -E /tmp/cwagent.deb
+  # Nginx site + app directory
+  - mkdir -p /var/www
+  - ln -sf /etc/nginx/sites-available/app /etc/nginx/sites-enabled/app
+  - rm -f /etc/nginx/sites-enabled/default
+  - systemctl enable --now php8.5-fpm nginx
