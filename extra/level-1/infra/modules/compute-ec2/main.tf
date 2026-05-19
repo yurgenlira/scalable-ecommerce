@@ -16,8 +16,8 @@ variable "instance_type" {
   default = "t3.small"
 }
 
-data "aws_ssm_parameter" "al2023" {
-  name = "/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64"
+data "aws_ssm_parameter" "ubuntu" {
+  name = "/aws/service/canonical/ubuntu/server/24.04/stable/current/amd64/hvm/ebs-gp3/ami-id"
 }
 
 resource "aws_iam_role" "ec2" {
@@ -48,11 +48,14 @@ resource "aws_iam_instance_profile" "ec2" {
 }
 
 resource "aws_instance" "this" {
-  ami                    = data.aws_ssm_parameter.al2023.value
+  ami                    = data.aws_ssm_parameter.ubuntu.value
   instance_type          = var.instance_type
   subnet_id              = var.subnet_id
   vpc_security_group_ids = [var.sg_id]
   iam_instance_profile   = aws_iam_instance_profile.ec2.name
+  user_data = templatefile("${path.module}/../../../deploy/ec2/cloud-init.yaml", {
+    nginx_conf_b64 = base64encode(file("${path.module}/../../../deploy/ec2/nginx.conf"))
+  })
   tags                   = { Name = var.name }
 }
 
