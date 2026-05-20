@@ -1,0 +1,35 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Resolve instance id
+        id: ec2
+        run: |
+          echo "id=$(aws ec2 describe-instances \
+            --filters 'Name=tag:Name,Values=scalable-ecommerce' 'Name=instance-state-name,Values=running' \
+            --query 'Reservations[0].Instances[0].InstanceId' --output text)" >> "$GITHUB_OUTPUT"
+
+      - name: Deploy via SSM
+        run: |
+          CMD=$(aws ssm send-command \
+            --instance-ids "${{ steps.ec2.outputs.id }}" \
+            --document-name AWS-RunShellScript \
+            --parameters 'commands=["curl -fsSL https://raw.githubusercontent.com/yurgenlira/scalable-ecommerce/main/extra/level-1/deploy/ec2/deploy.sh | bash"]' \
+            --query Command.CommandId --output text)
+          aws ssm wait command-executed --command-id "$CMD" --instance-id "${{ steps.ec2.outputs.id }}"
+          aws ssm get-command-invocation --command-id "$CMD" --instance-id "${{ steps.ec2.outputs.id }}" \
+            --query '{status:Status,out:StandardOutputContent,err:StandardErrorContent}'

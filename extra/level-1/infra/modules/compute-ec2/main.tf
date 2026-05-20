@@ -64,3 +64,23 @@ resource "aws_eip" "this" {
   instance = aws_instance.this.id
   tags     = { Name = var.name }
 }
+
+resource "aws_iam_role_policy" "ssm_read" {
+  name = "ssm-params-read"
+  role = aws_iam_role.ec2.id
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect   = "Allow"
+        Action   = ["ssm:GetParameter", "ssm:GetParameters", "ssm:GetParametersByPath"]
+        Resource = "arn:aws:ssm:*:*:parameter/scalable-ecommerce/prod/*"
+      },
+      {
+        Effect   = "Allow"
+        Action   = "kms:Decrypt"
+        Resource = "*"
+      }
+    ]
+  })
+}
