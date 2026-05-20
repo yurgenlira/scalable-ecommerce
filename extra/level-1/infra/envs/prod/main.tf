@@ -32,3 +32,41 @@ module "database" {
   subnet_ids = module.network.subnet_ids
   sg_id      = module.network.rds_sg_id
 }
+
+resource "random_id" "app_key" {
+  byte_length = 32
+}
+
+locals {
+  ssm_prefix = "/scalable-ecommerce/prod"
+}
+
+resource "aws_ssm_parameter" "app_key" {
+  name  = "${local.ssm_prefix}/app_key"
+  type  = "SecureString"
+  value = "base64:${random_id.app_key.b64_std}"
+}
+
+resource "aws_ssm_parameter" "db_password" {
+  name  = "${local.ssm_prefix}/db_password"
+  type  = "SecureString"
+  value = module.database.db_password
+}
+
+resource "aws_ssm_parameter" "db_host" {
+  name  = "${local.ssm_prefix}/db_host"
+  type  = "String"
+  value = module.database.db_endpoint
+}
+
+resource "aws_ssm_parameter" "db_name" {
+  name  = "${local.ssm_prefix}/db_name"
+  type  = "String"
+  value = module.database.db_name
+}
+
+resource "aws_ssm_parameter" "db_username" {
+  name  = "${local.ssm_prefix}/db_username"
+  type  = "String"
+  value = module.database.db_username
+}
