@@ -30,6 +30,8 @@ jobs:
             --document-name AWS-RunShellScript \
             --parameters 'commands=["curl -fsSL https://raw.githubusercontent.com/yurgenlira/scalable-ecommerce/main/extra/level-1/deploy/ec2/deploy.sh | bash"]' \
             --query Command.CommandId --output text)
-          aws ssm wait command-executed --command-id "$CMD" --instance-id "${{ steps.ec2.outputs.id }}"
+          aws ssm wait command-executed --command-id "$CMD" --instance-id "${{ steps.ec2.outputs.id }}" || true
           aws ssm get-command-invocation --command-id "$CMD" --instance-id "${{ steps.ec2.outputs.id }}" \
-            --query '{status:Status,out:StandardOutputContent,err:StandardErrorContent}'
+            --query '{status:Status,out:StandardOutputContent,err:StandardErrorContent}' --output json
+          STATUS=$(aws ssm get-command-invocation --command-id "$CMD" --instance-id "${{ steps.ec2.outputs.id }}" --query Status --output text)
+          [ "$STATUS" = "Success" ]
