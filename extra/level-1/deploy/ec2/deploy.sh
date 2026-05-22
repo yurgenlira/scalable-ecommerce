@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# SSM Run Command uses a restricted PATH that omits /usr/local/bin (where composer lives)
+export PATH="/usr/local/bin:$PATH"
+
 REPO=/var/www/scalable-ecommerce
 PREFIX=/scalable-ecommerce/prod
 
