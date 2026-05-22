@@ -7,6 +7,8 @@ apt:
 packages:
   - nginx
   - unzip
+  - git
+  - awscli
   - php8.5-cli
   - php8.5-fpm
   - php8.5-pgsql
