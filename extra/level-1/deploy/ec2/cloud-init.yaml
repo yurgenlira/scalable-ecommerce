@@ -35,4 +35,5 @@ runcmd:
   - mkdir -p /var/www
   - ln -sf /etc/nginx/sites-available/app /etc/nginx/sites-enabled/app
   - rm -f /etc/nginx/sites-enabled/default
-  - systemctl enable --now php8.5-fpm nginx
+  - systemctl enable php8.5-fpm nginx
+  - systemctl restart php8.5-fpm nginx
