@@ -2,13 +2,13 @@
 apt:
   sources:
     ondrej-php:
-      source: "ppa:ondrej/php"
+      source: "deb https://ppa.launchpadcontent.net/ondrej/php/ubuntu $RELEASE main"
+      keyid: "4F4EA0AAE5267A6C"
 
 packages:
   - nginx
   - unzip
   - git
-  - awscli
   - php8.5-cli
   - php8.5-fpm
   - php8.5-pgsql
@@ -26,12 +26,12 @@ write_files:
     content: ${nginx_conf_b64}
 
 runcmd:
-  # Composer
-  - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-  # CloudWatch Agent (.deb, not in apt)
+  - curl -sS "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o /tmp/awscliv2.zip
+  - unzip -q /tmp/awscliv2.zip -d /tmp
+  - /tmp/aws/install
+  - curl -sS https://getcomposer.org/installer | HOME=/root php -- --install-dir=/usr/local/bin --filename=composer
   - curl -fsSL https://amazoncloudwatch-agent.s3.amazonaws.com/ubuntu/amd64/latest/amazon-cloudwatch-agent.deb -o /tmp/cwagent.deb
   - dpkg -i -E /tmp/cwagent.deb
-  # Nginx site + app directory
   - mkdir -p /var/www
   - ln -sf /etc/nginx/sites-available/app /etc/nginx/sites-enabled/app
   - rm -f /etc/nginx/sites-enabled/default

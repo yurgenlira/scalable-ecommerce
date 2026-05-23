@@ -1,13 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# SSM Run Command uses a restricted PATH that omits /usr/local/bin (where composer lives)
 export PATH="/usr/local/bin:$PATH"
+export HOME=/root
 
 REPO=/var/www/scalable-ecommerce
 PREFIX=/scalable-ecommerce/prod
 
-# First deploy clones; later deploys fast-forward
 if [ ! -d "$REPO/.git" ]; then
   git clone https://github.com/yurgenlira/scalable-ecommerce.git "$REPO"
 fi
@@ -16,7 +15,6 @@ git -C "$REPO" pull --ff-only
 cd "$REPO/app"
 composer install --no-dev --optimize-autoloader --no-interaction
 
-# Build .env from SSM Parameter Store
 {
   echo "APP_NAME=ScalableEcommerce"
   echo "APP_ENV=production"
