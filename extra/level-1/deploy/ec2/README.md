@@ -14,6 +14,11 @@ The domain lives in Namecheap, not Route 53. Point it to the Elastic IP:
    - `@`   → <EIP>
    - `www` → <EIP>
 
+> `make down` destroys the Elastic IP, so `make up` allocates a **new** IP and
+> the A records must be updated again. Recreating only the instance
+> (`terraform apply -replace='module.compute.aws_instance.this'`) keeps the EIP
+> and the DNS untouched — prefer it while iterating.
+
 ## TLS
 
 Certbot issues the certificate on the instance (`certbot --nginx`, HTTP-01),
