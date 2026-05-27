@@ -1,0 +1,1868 @@
+{
+  "name": "scalable_ecommerce",
+  "tables": [
+    {
+      "name": "public.migrations",
+      "type": "BASE TABLE",
+      "columns": [
+        {
+          "name": "id",
+          "type": "integer",
+          "nullable": false,
+          "default": "nextval('migrations_id_seq'::regclass)"
+        },
+        {
+          "name": "migration",
+          "type": "varchar(255)",
+          "nullable": false
+        },
+        {
+          "name": "batch",
+          "type": "integer",
+          "nullable": false
+        }
+      ],
+      "indexes": [
+        {
+          "name": "migrations_pkey",
+          "def": "CREATE UNIQUE INDEX migrations_pkey ON public.migrations USING btree (id)",
+          "table": "public.migrations",
+          "columns": [
+            "id"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "name": "migrations_batch_not_null",
+          "type": "n",
+          "def": "NOT NULL batch",
+          "table": "public.migrations",
+          "referenced_table": "",
+          "columns": [
+            "batch"
+          ]
+        },
+        {
+          "name": "migrations_id_not_null",
+          "type": "n",
+          "def": "NOT NULL id",
+          "table": "public.migrations",
+          "referenced_table": "",
+          "columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "migrations_migration_not_null",
+          "type": "n",
+          "def": "NOT NULL migration",
+          "table": "public.migrations",
+          "referenced_table": "",
+          "columns": [
+            "migration"
+          ]
+        },
+        {
+          "name": "migrations_pkey",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (id)",
+          "table": "public.migrations",
+          "referenced_table": "",
+          "columns": [
+            "id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "public.users",
+      "type": "BASE TABLE",
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint",
+          "nullable": false,
+          "default": "nextval('users_id_seq'::regclass)"
+        },
+        {
+          "name": "name",
+          "type": "varchar(255)",
+          "nullable": false
+        },
+        {
+          "name": "email",
+          "type": "varchar(255)",
+          "nullable": false
+        },
+        {
+          "name": "email_verified_at",
+          "type": "timestamp(0) without time zone",
+          "nullable": true
+        },
+        {
+          "name": "password",
+          "type": "varchar(255)",
+          "nullable": false
+        },
+        {
+          "name": "remember_token",
+          "type": "varchar(100)",
+          "nullable": true
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp(0) without time zone",
+          "nullable": true
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp(0) without time zone",
+          "nullable": true
+        }
+      ],
+      "indexes": [
+        {
+          "name": "users_pkey",
+          "def": "CREATE UNIQUE INDEX users_pkey ON public.users USING btree (id)",
+          "table": "public.users",
+          "columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "users_email_unique",
+          "def": "CREATE UNIQUE INDEX users_email_unique ON public.users USING btree (email)",
+          "table": "public.users",
+          "columns": [
+            "email"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "name": "users_email_not_null",
+          "type": "n",
+          "def": "NOT NULL email",
+          "table": "public.users",
+          "referenced_table": "",
+          "columns": [
+            "email"
+          ]
+        },
+        {
+          "name": "users_id_not_null",
+          "type": "n",
+          "def": "NOT NULL id",
+          "table": "public.users",
+          "referenced_table": "",
+          "columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "users_name_not_null",
+          "type": "n",
+          "def": "NOT NULL name",
+          "table": "public.users",
+          "referenced_table": "",
+          "columns": [
+            "name"
+          ]
+        },
+        {
+          "name": "users_password_not_null",
+          "type": "n",
+          "def": "NOT NULL password",
+          "table": "public.users",
+          "referenced_table": "",
+          "columns": [
+            "password"
+          ]
+        },
+        {
+          "name": "users_pkey",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (id)",
+          "table": "public.users",
+          "referenced_table": "",
+          "columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "users_email_unique",
+          "type": "UNIQUE",
+          "def": "UNIQUE (email)",
+          "table": "public.users",
+          "referenced_table": "",
+          "columns": [
+            "email"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "public.password_reset_tokens",
+      "type": "BASE TABLE",
+      "columns": [
+        {
+          "name": "email",
+          "type": "varchar(255)",
+          "nullable": false
+        },
+        {
+          "name": "token",
+          "type": "varchar(255)",
+          "nullable": false
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp(0) without time zone",
+          "nullable": true
+        }
+      ],
+      "indexes": [
+        {
+          "name": "password_reset_tokens_pkey",
+          "def": "CREATE UNIQUE INDEX password_reset_tokens_pkey ON public.password_reset_tokens USING btree (email)",
+          "table": "public.password_reset_tokens",
+          "columns": [
+            "email"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "name": "password_reset_tokens_email_not_null",
+          "type": "n",
+          "def": "NOT NULL email",
+          "table": "public.password_reset_tokens",
+          "referenced_table": "",
+          "columns": [
+            "email"
+          ]
+        },
+        {
+          "name": "password_reset_tokens_token_not_null",
+          "type": "n",
+          "def": "NOT NULL token",
+          "table": "public.password_reset_tokens",
+          "referenced_table": "",
+          "columns": [
+            "token"
+          ]
+        },
+        {
+          "name": "password_reset_tokens_pkey",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (email)",
+          "table": "public.password_reset_tokens",
+          "referenced_table": "",
+          "columns": [
+            "email"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "public.sessions",
+      "type": "BASE TABLE",
+      "columns": [
+        {
+          "name": "id",
+          "type": "varchar(255)",
+          "nullable": false
+        },
+        {
+          "name": "user_id",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "ip_address",
+          "type": "varchar(45)",
+          "nullable": true
+        },
+        {
+          "name": "user_agent",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "payload",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "last_activity",
+          "type": "integer",
+          "nullable": false
+        }
+      ],
+      "indexes": [
+        {
+          "name": "sessions_pkey",
+          "def": "CREATE UNIQUE INDEX sessions_pkey ON public.sessions USING btree (id)",
+          "table": "public.sessions",
+          "columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "sessions_user_id_index",
+          "def": "CREATE INDEX sessions_user_id_index ON public.sessions USING btree (user_id)",
+          "table": "public.sessions",
+          "columns": [
+            "user_id"
+          ]
+        },
+        {
+          "name": "sessions_last_activity_index",
+          "def": "CREATE INDEX sessions_last_activity_index ON public.sessions USING btree (last_activity)",
+          "table": "public.sessions",
+          "columns": [
+            "last_activity"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "name": "sessions_id_not_null",
+          "type": "n",
+          "def": "NOT NULL id",
+          "table": "public.sessions",
+          "referenced_table": "",
+          "columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "sessions_last_activity_not_null",
+          "type": "n",
+          "def": "NOT NULL last_activity",
+          "table": "public.sessions",
+          "referenced_table": "",
+          "columns": [
+            "last_activity"
+          ]
+        },
+        {
+          "name": "sessions_payload_not_null",
+          "type": "n",
+          "def": "NOT NULL payload",
+          "table": "public.sessions",
+          "referenced_table": "",
+          "columns": [
+            "payload"
+          ]
+        },
+        {
+          "name": "sessions_pkey",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (id)",
+          "table": "public.sessions",
+          "referenced_table": "",
+          "columns": [
+            "id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "public.cache",
+      "type": "BASE TABLE",
+      "columns": [
+        {
+          "name": "key",
+          "type": "varchar(255)",
+          "nullable": false
+        },
+        {
+          "name": "value",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "expiration",
+          "type": "bigint",
+          "nullable": false
+        }
+      ],
+      "indexes": [
+        {
+          "name": "cache_pkey",
+          "def": "CREATE UNIQUE INDEX cache_pkey ON public.cache USING btree (key)",
+          "table": "public.cache",
+          "columns": [
+            "key"
+          ]
+        },
+        {
+          "name": "cache_expiration_index",
+          "def": "CREATE INDEX cache_expiration_index ON public.cache USING btree (expiration)",
+          "table": "public.cache",
+          "columns": [
+            "expiration"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "name": "cache_expiration_not_null",
+          "type": "n",
+          "def": "NOT NULL expiration",
+          "table": "public.cache",
+          "referenced_table": "",
+          "columns": [
+            "expiration"
+          ]
+        },
+        {
+          "name": "cache_key_not_null",
+          "type": "n",
+          "def": "NOT NULL key",
+          "table": "public.cache",
+          "referenced_table": "",
+          "columns": [
+            "key"
+          ]
+        },
+        {
+          "name": "cache_value_not_null",
+          "type": "n",
+          "def": "NOT NULL value",
+          "table": "public.cache",
+          "referenced_table": "",
+          "columns": [
+            "value"
+          ]
+        },
+        {
+          "name": "cache_pkey",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (key)",
+          "table": "public.cache",
+          "referenced_table": "",
+          "columns": [
+            "key"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "public.cache_locks",
+      "type": "BASE TABLE",
+      "columns": [
+        {
+          "name": "key",
+          "type": "varchar(255)",
+          "nullable": false
+        },
+        {
+          "name": "owner",
+          "type": "varchar(255)",
+          "nullable": false
+        },
+        {
+          "name": "expiration",
+          "type": "bigint",
+          "nullable": false
+        }
+      ],
+      "indexes": [
+        {
+          "name": "cache_locks_pkey",
+          "def": "CREATE UNIQUE INDEX cache_locks_pkey ON public.cache_locks USING btree (key)",
+          "table": "public.cache_locks",
+          "columns": [
+            "key"
+          ]
+        },
+        {
+          "name": "cache_locks_expiration_index",
+          "def": "CREATE INDEX cache_locks_expiration_index ON public.cache_locks USING btree (expiration)",
+          "table": "public.cache_locks",
+          "columns": [
+            "expiration"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "name": "cache_locks_expiration_not_null",
+          "type": "n",
+          "def": "NOT NULL expiration",
+          "table": "public.cache_locks",
+          "referenced_table": "",
+          "columns": [
+            "expiration"
+          ]
+        },
+        {
+          "name": "cache_locks_key_not_null",
+          "type": "n",
+          "def": "NOT NULL key",
+          "table": "public.cache_locks",
+          "referenced_table": "",
+          "columns": [
+            "key"
+          ]
+        },
+        {
+          "name": "cache_locks_owner_not_null",
+          "type": "n",
+          "def": "NOT NULL owner",
+          "table": "public.cache_locks",
+          "referenced_table": "",
+          "columns": [
+            "owner"
+          ]
+        },
+        {
+          "name": "cache_locks_pkey",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (key)",
+          "table": "public.cache_locks",
+          "referenced_table": "",
+          "columns": [
+            "key"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "public.jobs",
+      "type": "BASE TABLE",
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint",
+          "nullable": false,
+          "default": "nextval('jobs_id_seq'::regclass)"
+        },
+        {
+          "name": "queue",
+          "type": "varchar(255)",
+          "nullable": false
+        },
+        {
+          "name": "payload",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "attempts",
+          "type": "smallint",
+          "nullable": false
+        },
+        {
+          "name": "reserved_at",
+          "type": "integer",
+          "nullable": true
+        },
+        {
+          "name": "available_at",
+          "type": "integer",
+          "nullable": false
+        },
+        {
+          "name": "created_at",
+          "type": "integer",
+          "nullable": false
+        }
+      ],
+      "indexes": [
+        {
+          "name": "jobs_pkey",
+          "def": "CREATE UNIQUE INDEX jobs_pkey ON public.jobs USING btree (id)",
+          "table": "public.jobs",
+          "columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "jobs_queue_index",
+          "def": "CREATE INDEX jobs_queue_index ON public.jobs USING btree (queue)",
+          "table": "public.jobs",
+          "columns": [
+            "queue"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "name": "jobs_attempts_not_null",
+          "type": "n",
+          "def": "NOT NULL attempts",
+          "table": "public.jobs",
+          "referenced_table": "",
+          "columns": [
+            "attempts"
+          ]
+        },
+        {
+          "name": "jobs_available_at_not_null",
+          "type": "n",
+          "def": "NOT NULL available_at",
+          "table": "public.jobs",
+          "referenced_table": "",
+          "columns": [
+            "available_at"
+          ]
+        },
+        {
+          "name": "jobs_created_at_not_null",
+          "type": "n",
+          "def": "NOT NULL created_at",
+          "table": "public.jobs",
+          "referenced_table": "",
+          "columns": [
+            "created_at"
+          ]
+        },
+        {
+          "name": "jobs_id_not_null",
+          "type": "n",
+          "def": "NOT NULL id",
+          "table": "public.jobs",
+          "referenced_table": "",
+          "columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "jobs_payload_not_null",
+          "type": "n",
+          "def": "NOT NULL payload",
+          "table": "public.jobs",
+          "referenced_table": "",
+          "columns": [
+            "payload"
+          ]
+        },
+        {
+          "name": "jobs_queue_not_null",
+          "type": "n",
+          "def": "NOT NULL queue",
+          "table": "public.jobs",
+          "referenced_table": "",
+          "columns": [
+            "queue"
+          ]
+        },
+        {
+          "name": "jobs_pkey",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (id)",
+          "table": "public.jobs",
+          "referenced_table": "",
+          "columns": [
+            "id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "public.job_batches",
+      "type": "BASE TABLE",
+      "columns": [
+        {
+          "name": "id",
+          "type": "varchar(255)",
+          "nullable": false
+        },
+        {
+          "name": "name",
+          "type": "varchar(255)",
+          "nullable": false
+        },
+        {
+          "name": "total_jobs",
+          "type": "integer",
+          "nullable": false
+        },
+        {
+          "name": "pending_jobs",
+          "type": "integer",
+          "nullable": false
+        },
+        {
+          "name": "failed_jobs",
+          "type": "integer",
+          "nullable": false
+        },
+        {
+          "name": "failed_job_ids",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "options",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "cancelled_at",
+          "type": "integer",
+          "nullable": true
+        },
+        {
+          "name": "created_at",
+          "type": "integer",
+          "nullable": false
+        },
+        {
+          "name": "finished_at",
+          "type": "integer",
+          "nullable": true
+        }
+      ],
+      "indexes": [
+        {
+          "name": "job_batches_pkey",
+          "def": "CREATE UNIQUE INDEX job_batches_pkey ON public.job_batches USING btree (id)",
+          "table": "public.job_batches",
+          "columns": [
+            "id"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "name": "job_batches_created_at_not_null",
+          "type": "n",
+          "def": "NOT NULL created_at",
+          "table": "public.job_batches",
+          "referenced_table": "",
+          "columns": [
+            "created_at"
+          ]
+        },
+        {
+          "name": "job_batches_failed_job_ids_not_null",
+          "type": "n",
+          "def": "NOT NULL failed_job_ids",
+          "table": "public.job_batches",
+          "referenced_table": "",
+          "columns": [
+            "failed_job_ids"
+          ]
+        },
+        {
+          "name": "job_batches_failed_jobs_not_null",
+          "type": "n",
+          "def": "NOT NULL failed_jobs",
+          "table": "public.job_batches",
+          "referenced_table": "",
+          "columns": [
+            "failed_jobs"
+          ]
+        },
+        {
+          "name": "job_batches_id_not_null",
+          "type": "n",
+          "def": "NOT NULL id",
+          "table": "public.job_batches",
+          "referenced_table": "",
+          "columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "job_batches_name_not_null",
+          "type": "n",
+          "def": "NOT NULL name",
+          "table": "public.job_batches",
+          "referenced_table": "",
+          "columns": [
+            "name"
+          ]
+        },
+        {
+          "name": "job_batches_pending_jobs_not_null",
+          "type": "n",
+          "def": "NOT NULL pending_jobs",
+          "table": "public.job_batches",
+          "referenced_table": "",
+          "columns": [
+            "pending_jobs"
+          ]
+        },
+        {
+          "name": "job_batches_total_jobs_not_null",
+          "type": "n",
+          "def": "NOT NULL total_jobs",
+          "table": "public.job_batches",
+          "referenced_table": "",
+          "columns": [
+            "total_jobs"
+          ]
+        },
+        {
+          "name": "job_batches_pkey",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (id)",
+          "table": "public.job_batches",
+          "referenced_table": "",
+          "columns": [
+            "id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "public.failed_jobs",
+      "type": "BASE TABLE",
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint",
+          "nullable": false,
+          "default": "nextval('failed_jobs_id_seq'::regclass)"
+        },
+        {
+          "name": "uuid",
+          "type": "varchar(255)",
+          "nullable": false
+        },
+        {
+          "name": "connection",
+          "type": "varchar(255)",
+          "nullable": false
+        },
+        {
+          "name": "queue",
+          "type": "varchar(255)",
+          "nullable": false
+        },
+        {
+          "name": "payload",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "exception",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "failed_at",
+          "type": "timestamp(0) without time zone",
+          "nullable": false,
+          "default": "CURRENT_TIMESTAMP"
+        }
+      ],
+      "indexes": [
+        {
+          "name": "failed_jobs_pkey",
+          "def": "CREATE UNIQUE INDEX failed_jobs_pkey ON public.failed_jobs USING btree (id)",
+          "table": "public.failed_jobs",
+          "columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "failed_jobs_connection_queue_failed_at_index",
+          "def": "CREATE INDEX failed_jobs_connection_queue_failed_at_index ON public.failed_jobs USING btree (connection, queue, failed_at)",
+          "table": "public.failed_jobs",
+          "columns": [
+            "connection",
+            "queue",
+            "failed_at"
+          ]
+        },
+        {
+          "name": "failed_jobs_uuid_unique",
+          "def": "CREATE UNIQUE INDEX failed_jobs_uuid_unique ON public.failed_jobs USING btree (uuid)",
+          "table": "public.failed_jobs",
+          "columns": [
+            "uuid"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "name": "failed_jobs_connection_not_null",
+          "type": "n",
+          "def": "NOT NULL connection",
+          "table": "public.failed_jobs",
+          "referenced_table": "",
+          "columns": [
+            "connection"
+          ]
+        },
+        {
+          "name": "failed_jobs_exception_not_null",
+          "type": "n",
+          "def": "NOT NULL exception",
+          "table": "public.failed_jobs",
+          "referenced_table": "",
+          "columns": [
+            "exception"
+          ]
+        },
+        {
+          "name": "failed_jobs_failed_at_not_null",
+          "type": "n",
+          "def": "NOT NULL failed_at",
+          "table": "public.failed_jobs",
+          "referenced_table": "",
+          "columns": [
+            "failed_at"
+          ]
+        },
+        {
+          "name": "failed_jobs_id_not_null",
+          "type": "n",
+          "def": "NOT NULL id",
+          "table": "public.failed_jobs",
+          "referenced_table": "",
+          "columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "failed_jobs_payload_not_null",
+          "type": "n",
+          "def": "NOT NULL payload",
+          "table": "public.failed_jobs",
+          "referenced_table": "",
+          "columns": [
+            "payload"
+          ]
+        },
+        {
+          "name": "failed_jobs_queue_not_null",
+          "type": "n",
+          "def": "NOT NULL queue",
+          "table": "public.failed_jobs",
+          "referenced_table": "",
+          "columns": [
+            "queue"
+          ]
+        },
+        {
+          "name": "failed_jobs_uuid_not_null",
+          "type": "n",
+          "def": "NOT NULL uuid",
+          "table": "public.failed_jobs",
+          "referenced_table": "",
+          "columns": [
+            "uuid"
+          ]
+        },
+        {
+          "name": "failed_jobs_pkey",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (id)",
+          "table": "public.failed_jobs",
+          "referenced_table": "",
+          "columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "failed_jobs_uuid_unique",
+          "type": "UNIQUE",
+          "def": "UNIQUE (uuid)",
+          "table": "public.failed_jobs",
+          "referenced_table": "",
+          "columns": [
+            "uuid"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "public.personal_access_tokens",
+      "type": "BASE TABLE",
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint",
+          "nullable": false,
+          "default": "nextval('personal_access_tokens_id_seq'::regclass)"
+        },
+        {
+          "name": "tokenable_type",
+          "type": "varchar(255)",
+          "nullable": false
+        },
+        {
+          "name": "tokenable_id",
+          "type": "bigint",
+          "nullable": false
+        },
+        {
+          "name": "name",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "token",
+          "type": "varchar(64)",
+          "nullable": false
+        },
+        {
+          "name": "abilities",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "last_used_at",
+          "type": "timestamp(0) without time zone",
+          "nullable": true
+        },
+        {
+          "name": "expires_at",
+          "type": "timestamp(0) without time zone",
+          "nullable": true
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp(0) without time zone",
+          "nullable": true
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp(0) without time zone",
+          "nullable": true
+        }
+      ],
+      "indexes": [
+        {
+          "name": "personal_access_tokens_pkey",
+          "def": "CREATE UNIQUE INDEX personal_access_tokens_pkey ON public.personal_access_tokens USING btree (id)",
+          "table": "public.personal_access_tokens",
+          "columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "personal_access_tokens_tokenable_type_tokenable_id_index",
+          "def": "CREATE INDEX personal_access_tokens_tokenable_type_tokenable_id_index ON public.personal_access_tokens USING btree (tokenable_type, tokenable_id)",
+          "table": "public.personal_access_tokens",
+          "columns": [
+            "tokenable_type",
+            "tokenable_id"
+          ]
+        },
+        {
+          "name": "personal_access_tokens_token_unique",
+          "def": "CREATE UNIQUE INDEX personal_access_tokens_token_unique ON public.personal_access_tokens USING btree (token)",
+          "table": "public.personal_access_tokens",
+          "columns": [
+            "token"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "name": "personal_access_tokens_id_not_null",
+          "type": "n",
+          "def": "NOT NULL id",
+          "table": "public.personal_access_tokens",
+          "referenced_table": "",
+          "columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "personal_access_tokens_name_not_null",
+          "type": "n",
+          "def": "NOT NULL name",
+          "table": "public.personal_access_tokens",
+          "referenced_table": "",
+          "columns": [
+            "name"
+          ]
+        },
+        {
+          "name": "personal_access_tokens_token_not_null",
+          "type": "n",
+          "def": "NOT NULL token",
+          "table": "public.personal_access_tokens",
+          "referenced_table": "",
+          "columns": [
+            "token"
+          ]
+        },
+        {
+          "name": "personal_access_tokens_tokenable_id_not_null",
+          "type": "n",
+          "def": "NOT NULL tokenable_id",
+          "table": "public.personal_access_tokens",
+          "referenced_table": "",
+          "columns": [
+            "tokenable_id"
+          ]
+        },
+        {
+          "name": "personal_access_tokens_tokenable_type_not_null",
+          "type": "n",
+          "def": "NOT NULL tokenable_type",
+          "table": "public.personal_access_tokens",
+          "referenced_table": "",
+          "columns": [
+            "tokenable_type"
+          ]
+        },
+        {
+          "name": "personal_access_tokens_pkey",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (id)",
+          "table": "public.personal_access_tokens",
+          "referenced_table": "",
+          "columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "personal_access_tokens_token_unique",
+          "type": "UNIQUE",
+          "def": "UNIQUE (token)",
+          "table": "public.personal_access_tokens",
+          "referenced_table": "",
+          "columns": [
+            "token"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "public.products",
+      "type": "BASE TABLE",
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint",
+          "nullable": false,
+          "default": "nextval('products_id_seq'::regclass)"
+        },
+        {
+          "name": "name",
+          "type": "varchar(255)",
+          "nullable": false
+        },
+        {
+          "name": "slug",
+          "type": "varchar(255)",
+          "nullable": false
+        },
+        {
+          "name": "price_cents",
+          "type": "integer",
+          "nullable": false
+        },
+        {
+          "name": "stock",
+          "type": "integer",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp(0) without time zone",
+          "nullable": true
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp(0) without time zone",
+          "nullable": true
+        }
+      ],
+      "indexes": [
+        {
+          "name": "products_pkey",
+          "def": "CREATE UNIQUE INDEX products_pkey ON public.products USING btree (id)",
+          "table": "public.products",
+          "columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "products_slug_unique",
+          "def": "CREATE UNIQUE INDEX products_slug_unique ON public.products USING btree (slug)",
+          "table": "public.products",
+          "columns": [
+            "slug"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "name": "products_id_not_null",
+          "type": "n",
+          "def": "NOT NULL id",
+          "table": "public.products",
+          "referenced_table": "",
+          "columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "products_name_not_null",
+          "type": "n",
+          "def": "NOT NULL name",
+          "table": "public.products",
+          "referenced_table": "",
+          "columns": [
+            "name"
+          ]
+        },
+        {
+          "name": "products_price_cents_not_null",
+          "type": "n",
+          "def": "NOT NULL price_cents",
+          "table": "public.products",
+          "referenced_table": "",
+          "columns": [
+            "price_cents"
+          ]
+        },
+        {
+          "name": "products_slug_not_null",
+          "type": "n",
+          "def": "NOT NULL slug",
+          "table": "public.products",
+          "referenced_table": "",
+          "columns": [
+            "slug"
+          ]
+        },
+        {
+          "name": "products_stock_not_null",
+          "type": "n",
+          "def": "NOT NULL stock",
+          "table": "public.products",
+          "referenced_table": "",
+          "columns": [
+            "stock"
+          ]
+        },
+        {
+          "name": "products_pkey",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (id)",
+          "table": "public.products",
+          "referenced_table": "",
+          "columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "products_slug_unique",
+          "type": "UNIQUE",
+          "def": "UNIQUE (slug)",
+          "table": "public.products",
+          "referenced_table": "",
+          "columns": [
+            "slug"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "public.carts",
+      "type": "BASE TABLE",
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint",
+          "nullable": false,
+          "default": "nextval('carts_id_seq'::regclass)"
+        },
+        {
+          "name": "user_id",
+          "type": "bigint",
+          "nullable": false
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp(0) without time zone",
+          "nullable": true
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp(0) without time zone",
+          "nullable": true
+        }
+      ],
+      "indexes": [
+        {
+          "name": "carts_pkey",
+          "def": "CREATE UNIQUE INDEX carts_pkey ON public.carts USING btree (id)",
+          "table": "public.carts",
+          "columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "carts_user_id_unique",
+          "def": "CREATE UNIQUE INDEX carts_user_id_unique ON public.carts USING btree (user_id)",
+          "table": "public.carts",
+          "columns": [
+            "user_id"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "name": "carts_id_not_null",
+          "type": "n",
+          "def": "NOT NULL id",
+          "table": "public.carts",
+          "referenced_table": "",
+          "columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "carts_user_id_not_null",
+          "type": "n",
+          "def": "NOT NULL user_id",
+          "table": "public.carts",
+          "referenced_table": "",
+          "columns": [
+            "user_id"
+          ]
+        },
+        {
+          "name": "carts_user_id_foreign",
+          "type": "FOREIGN KEY",
+          "def": "FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE",
+          "table": "public.carts",
+          "referenced_table": "public.users",
+          "columns": [
+            "user_id"
+          ],
+          "referenced_columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "carts_pkey",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (id)",
+          "table": "public.carts",
+          "referenced_table": "",
+          "columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "carts_user_id_unique",
+          "type": "UNIQUE",
+          "def": "UNIQUE (user_id)",
+          "table": "public.carts",
+          "referenced_table": "",
+          "columns": [
+            "user_id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "public.cart_items",
+      "type": "BASE TABLE",
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint",
+          "nullable": false,
+          "default": "nextval('cart_items_id_seq'::regclass)"
+        },
+        {
+          "name": "cart_id",
+          "type": "bigint",
+          "nullable": false
+        },
+        {
+          "name": "product_id",
+          "type": "bigint",
+          "nullable": false
+        },
+        {
+          "name": "quantity",
+          "type": "integer",
+          "nullable": false
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp(0) without time zone",
+          "nullable": true
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp(0) without time zone",
+          "nullable": true
+        }
+      ],
+      "indexes": [
+        {
+          "name": "cart_items_pkey",
+          "def": "CREATE UNIQUE INDEX cart_items_pkey ON public.cart_items USING btree (id)",
+          "table": "public.cart_items",
+          "columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "cart_items_cart_id_product_id_unique",
+          "def": "CREATE UNIQUE INDEX cart_items_cart_id_product_id_unique ON public.cart_items USING btree (cart_id, product_id)",
+          "table": "public.cart_items",
+          "columns": [
+            "cart_id",
+            "product_id"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "name": "cart_items_cart_id_not_null",
+          "type": "n",
+          "def": "NOT NULL cart_id",
+          "table": "public.cart_items",
+          "referenced_table": "",
+          "columns": [
+            "cart_id"
+          ]
+        },
+        {
+          "name": "cart_items_id_not_null",
+          "type": "n",
+          "def": "NOT NULL id",
+          "table": "public.cart_items",
+          "referenced_table": "",
+          "columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "cart_items_product_id_not_null",
+          "type": "n",
+          "def": "NOT NULL product_id",
+          "table": "public.cart_items",
+          "referenced_table": "",
+          "columns": [
+            "product_id"
+          ]
+        },
+        {
+          "name": "cart_items_quantity_not_null",
+          "type": "n",
+          "def": "NOT NULL quantity",
+          "table": "public.cart_items",
+          "referenced_table": "",
+          "columns": [
+            "quantity"
+          ]
+        },
+        {
+          "name": "cart_items_product_id_foreign",
+          "type": "FOREIGN KEY",
+          "def": "FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE",
+          "table": "public.cart_items",
+          "referenced_table": "public.products",
+          "columns": [
+            "product_id"
+          ],
+          "referenced_columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "cart_items_cart_id_foreign",
+          "type": "FOREIGN KEY",
+          "def": "FOREIGN KEY (cart_id) REFERENCES carts(id) ON DELETE CASCADE",
+          "table": "public.cart_items",
+          "referenced_table": "public.carts",
+          "columns": [
+            "cart_id"
+          ],
+          "referenced_columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "cart_items_pkey",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (id)",
+          "table": "public.cart_items",
+          "referenced_table": "",
+          "columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "cart_items_cart_id_product_id_unique",
+          "type": "UNIQUE",
+          "def": "UNIQUE (cart_id, product_id)",
+          "table": "public.cart_items",
+          "referenced_table": "",
+          "columns": [
+            "cart_id",
+            "product_id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "public.orders",
+      "type": "BASE TABLE",
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint",
+          "nullable": false,
+          "default": "nextval('orders_id_seq'::regclass)"
+        },
+        {
+          "name": "user_id",
+          "type": "bigint",
+          "nullable": false
+        },
+        {
+          "name": "status",
+          "type": "varchar(255)",
+          "nullable": false
+        },
+        {
+          "name": "total_cents",
+          "type": "integer",
+          "nullable": false
+        },
+        {
+          "name": "payment_reference",
+          "type": "varchar(255)",
+          "nullable": true
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp(0) without time zone",
+          "nullable": true
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp(0) without time zone",
+          "nullable": true
+        }
+      ],
+      "indexes": [
+        {
+          "name": "orders_pkey",
+          "def": "CREATE UNIQUE INDEX orders_pkey ON public.orders USING btree (id)",
+          "table": "public.orders",
+          "columns": [
+            "id"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "name": "orders_id_not_null",
+          "type": "n",
+          "def": "NOT NULL id",
+          "table": "public.orders",
+          "referenced_table": "",
+          "columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "orders_status_not_null",
+          "type": "n",
+          "def": "NOT NULL status",
+          "table": "public.orders",
+          "referenced_table": "",
+          "columns": [
+            "status"
+          ]
+        },
+        {
+          "name": "orders_total_cents_not_null",
+          "type": "n",
+          "def": "NOT NULL total_cents",
+          "table": "public.orders",
+          "referenced_table": "",
+          "columns": [
+            "total_cents"
+          ]
+        },
+        {
+          "name": "orders_user_id_not_null",
+          "type": "n",
+          "def": "NOT NULL user_id",
+          "table": "public.orders",
+          "referenced_table": "",
+          "columns": [
+            "user_id"
+          ]
+        },
+        {
+          "name": "orders_user_id_foreign",
+          "type": "FOREIGN KEY",
+          "def": "FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE",
+          "table": "public.orders",
+          "referenced_table": "public.users",
+          "columns": [
+            "user_id"
+          ],
+          "referenced_columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "orders_pkey",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (id)",
+          "table": "public.orders",
+          "referenced_table": "",
+          "columns": [
+            "id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "public.order_items",
+      "type": "BASE TABLE",
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint",
+          "nullable": false,
+          "default": "nextval('order_items_id_seq'::regclass)"
+        },
+        {
+          "name": "order_id",
+          "type": "bigint",
+          "nullable": false
+        },
+        {
+          "name": "product_id",
+          "type": "bigint",
+          "nullable": false
+        },
+        {
+          "name": "quantity",
+          "type": "integer",
+          "nullable": false
+        },
+        {
+          "name": "unit_price_cents",
+          "type": "integer",
+          "nullable": false
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp(0) without time zone",
+          "nullable": true
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp(0) without time zone",
+          "nullable": true
+        }
+      ],
+      "indexes": [
+        {
+          "name": "order_items_pkey",
+          "def": "CREATE UNIQUE INDEX order_items_pkey ON public.order_items USING btree (id)",
+          "table": "public.order_items",
+          "columns": [
+            "id"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "name": "order_items_id_not_null",
+          "type": "n",
+          "def": "NOT NULL id",
+          "table": "public.order_items",
+          "referenced_table": "",
+          "columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "order_items_order_id_not_null",
+          "type": "n",
+          "def": "NOT NULL order_id",
+          "table": "public.order_items",
+          "referenced_table": "",
+          "columns": [
+            "order_id"
+          ]
+        },
+        {
+          "name": "order_items_product_id_not_null",
+          "type": "n",
+          "def": "NOT NULL product_id",
+          "table": "public.order_items",
+          "referenced_table": "",
+          "columns": [
+            "product_id"
+          ]
+        },
+        {
+          "name": "order_items_quantity_not_null",
+          "type": "n",
+          "def": "NOT NULL quantity",
+          "table": "public.order_items",
+          "referenced_table": "",
+          "columns": [
+            "quantity"
+          ]
+        },
+        {
+          "name": "order_items_unit_price_cents_not_null",
+          "type": "n",
+          "def": "NOT NULL unit_price_cents",
+          "table": "public.order_items",
+          "referenced_table": "",
+          "columns": [
+            "unit_price_cents"
+          ]
+        },
+        {
+          "name": "order_items_product_id_foreign",
+          "type": "FOREIGN KEY",
+          "def": "FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE",
+          "table": "public.order_items",
+          "referenced_table": "public.products",
+          "columns": [
+            "product_id"
+          ],
+          "referenced_columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "order_items_order_id_foreign",
+          "type": "FOREIGN KEY",
+          "def": "FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE",
+          "table": "public.order_items",
+          "referenced_table": "public.orders",
+          "columns": [
+            "order_id"
+          ],
+          "referenced_columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "order_items_pkey",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (id)",
+          "table": "public.order_items",
+          "referenced_table": "",
+          "columns": [
+            "id"
+          ]
+        }
+      ]
+    }
+  ],
+  "relations": [
+    {
+      "table": "public.carts",
+      "columns": [
+        "user_id"
+      ],
+      "cardinality": "zero_or_one",
+      "parent_table": "public.users",
+      "parent_columns": [
+        "id"
+      ],
+      "parent_cardinality": "exactly_one",
+      "def": "FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE"
+    },
+    {
+      "table": "public.cart_items",
+      "columns": [
+        "product_id"
+      ],
+      "cardinality": "zero_or_more",
+      "parent_table": "public.products",
+      "parent_columns": [
+        "id"
+      ],
+      "parent_cardinality": "exactly_one",
+      "def": "FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE"
+    },
+    {
+      "table": "public.cart_items",
+      "columns": [
+        "cart_id"
+      ],
+      "cardinality": "zero_or_more",
+      "parent_table": "public.carts",
+      "parent_columns": [
+        "id"
+      ],
+      "parent_cardinality": "exactly_one",
+      "def": "FOREIGN KEY (cart_id) REFERENCES carts(id) ON DELETE CASCADE"
+    },
+    {
+      "table": "public.orders",
+      "columns": [
+        "user_id"
+      ],
+      "cardinality": "zero_or_more",
+      "parent_table": "public.users",
+      "parent_columns": [
+        "id"
+      ],
+      "parent_cardinality": "exactly_one",
+      "def": "FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE"
+    },
+    {
+      "table": "public.order_items",
+      "columns": [
+        "product_id"
+      ],
+      "cardinality": "zero_or_more",
+      "parent_table": "public.products",
+      "parent_columns": [
+        "id"
+      ],
+      "parent_cardinality": "exactly_one",
+      "def": "FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE"
+    },
+    {
+      "table": "public.order_items",
+      "columns": [
+        "order_id"
+      ],
+      "cardinality": "zero_or_more",
+      "parent_table": "public.orders",
+      "parent_columns": [
+        "id"
+      ],
+      "parent_cardinality": "exactly_one",
+      "def": "FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE"
+    }
+  ],
+  "driver": {
+    "name": "postgres",
+    "database_version": "PostgreSQL 18.4 (Ubuntu 18.4-1.pgdg24.04+1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0, 64-bit",
+    "meta": {
+      "current_schema": "public",
+      "search_paths": [
+        "app",
+        "public"
+      ],
+      "dict": {
+        "Functions": "Stored procedures and functions"
+      }
+    }
+  }
+}
