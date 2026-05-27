@@ -34,5 +34,11 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
+    'payment' => [
+        'mock' => [
+            'decline_over_cents' => env('PAYMENT_MOCK_DECLINE_OVER_CENTS'),
+            'latency_ms' => (int) env('PAYMENT_MOCK_LATENCY_MS', 0),
+        ],
+    ],
 
 ];
