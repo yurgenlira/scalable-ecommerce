@@ -29,6 +29,9 @@ composer install --no-dev --optimize-autoloader --no-interaction
 } > .env
 
 php artisan migrate --force
+# seed on every deploy — ok for ephemeral infra + demo catalog (idempotent);
+# move to a data migration / one-off seed once prod is persistent or the catalog is editable.
+php artisan db:seed --force
 php artisan config:cache
 chown -R www-data:www-data storage bootstrap/cache
 systemctl reload php8.5-fpm
