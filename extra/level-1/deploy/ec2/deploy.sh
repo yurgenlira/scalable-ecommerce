@@ -32,4 +32,4 @@ php artisan migrate --force
 php artisan config:cache
 chown -R www-data:www-data storage bootstrap/cache
 systemctl reload php8.5-fpm
-curl -fsS http://localhost/up > /dev/null
+curl -fsS --resolve jlira.dev:443:127.0.0.1 https://jlira.dev/up > /dev/null
