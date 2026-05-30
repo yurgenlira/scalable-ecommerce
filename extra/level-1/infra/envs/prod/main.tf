@@ -70,3 +70,8 @@ resource "aws_ssm_parameter" "db_username" {
   type  = "String"
   value = module.database.db_username
 }
+
+module "observability" {
+  source      = "../../modules/observability"
+  instance_id = module.compute.instance_id
+}

@@ -24,6 +24,9 @@ write_files:
   - path: /etc/nginx/sites-available/app
     encoding: b64
     content: ${nginx_conf_b64}
+  - path: /opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json
+    encoding: b64
+    content: ${cw_agent_b64}
 
 runcmd:
   - curl -sS "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o /tmp/awscliv2.zip
@@ -37,3 +40,4 @@ runcmd:
   - rm -f /etc/nginx/sites-enabled/default
   - systemctl enable php8.5-fpm nginx
   - systemctl restart php8.5-fpm nginx
+  - /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -s -c file:/opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json

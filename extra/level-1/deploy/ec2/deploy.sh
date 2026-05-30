@@ -19,6 +19,7 @@ composer install --no-dev --optimize-autoloader --no-interaction
   echo "APP_NAME=ScalableEcommerce"
   echo "APP_ENV=production"
   echo "APP_DEBUG=false"
+  echo "LOG_CHANNEL=json"
   echo "APP_KEY=$(aws ssm get-parameter --name "$PREFIX/app_key" --with-decryption --query Parameter.Value --output text)"
   echo "DB_CONNECTION=pgsql"
   echo "DB_HOST=$(aws ssm get-parameter --name "$PREFIX/db_host" --query Parameter.Value --output text)"
