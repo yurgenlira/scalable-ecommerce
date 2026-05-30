@@ -55,6 +55,7 @@ resource "aws_instance" "this" {
   iam_instance_profile   = aws_iam_instance_profile.ec2.name
   user_data = templatefile("${path.module}/../../../deploy/ec2/cloud-init.yaml", {
     nginx_conf_b64 = base64encode(file("${path.module}/../../../deploy/ec2/nginx.conf"))
+    cw_agent_b64   = base64encode(file("${path.module}/../../../deploy/ec2/cloudwatch-agent.json"))
   })
   tags                   = { Name = var.name }
 }
@@ -83,4 +84,9 @@ resource "aws_iam_role_policy" "ssm_read" {
       }
     ]
   })
+}
+
+resource "aws_iam_role_policy_attachment" "cw_agent" {
+  role       = aws_iam_role.ec2.name
+  policy_arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
 }
