@@ -1,5 +1,6 @@
 <?php
 
+use Monolog\Formatter\JsonFormatter;
 use Monolog\Handler\NullHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Handler\SyslogUdpHandler;
@@ -128,10 +129,10 @@ return [
         ],
 
         'json' => [
-        'driver' => 'single',
-        'path' => storage_path('logs/laravel.log'),
-        'formatter' => Monolog\Formatter\JsonFormatter::class,
-        'level' => env('LOG_LEVEL', 'info'),
+            'driver' => 'single',
+            'path' => storage_path('logs/laravel.log'),
+            'formatter' => JsonFormatter::class,
+            'level' => env('LOG_LEVEL', 'info'),
         ],
 
     ],
