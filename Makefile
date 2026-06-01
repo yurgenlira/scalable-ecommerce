@@ -1,5 +1,5 @@
 .DEFAULT_GOAL := help
-.PHONY: help lint analyse test check up down plan cost-guard destroy-all
+.PHONY: help lint analyse test check up down plan cost-guard destroy-all demo
 
 RUN := cd app &&
 TF  := terraform -chdir=extra/level-1/infra/envs/prod
@@ -36,3 +36,7 @@ cost-guard: ## Create budget + auto-stop (needs var ALERT_EMAIL=my_email@domain.
 
 destroy-all: ## Destroy all project resources and verify $0 cost (keeps bootstrap S3 state)
 	bash extra/level-1/ephemeral/teardown/destroy-all.sh
+
+##@ Demo
+demo: ## Seed demo data on the running instance
+	bash extra/level-1/ephemeral/demo-data/seed.sh
