@@ -37,8 +37,8 @@ php artisan config:cache
 chown -R www-data:www-data storage bootstrap/cache
 systemctl reload php8.5-fpm
 # health-check the TLS vhost if a cert exists, else plain HTTP (no-domain mode)
-if [ -d /etc/letsencrypt/live ]; then
-  domain=$(ls /etc/letsencrypt/live | head -1)
+domain=$(find /etc/letsencrypt/live -mindepth 1 -maxdepth 1 -type d -printf '%f\n' 2>/dev/null | head -1)
+if [ -n "$domain" ]; then
   curl -fsS --resolve "$domain:443:127.0.0.1" "https://$domain/up" > /dev/null
 else
   curl -fsS http://localhost/up > /dev/null
