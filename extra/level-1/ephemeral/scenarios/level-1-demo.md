@@ -6,8 +6,9 @@ Provision → serve → buy → observe → ship → destroy. Simulated payment.
 ```bash
 make up
 terraform -chdir=extra/level-1/infra/envs/prod output public_ip
+make cost-guard ALERT_EMAIL=yurgenlira@hotmail.com   # budget + auto-stop guardrails
 ```
-Show: EC2 + RDS created by Terraform with one command.
+Show: EC2 + RDS created by Terraform with one command, plus the FinOps guardrails.
 
 ## 2. DNS + HTTPS
 ```bash

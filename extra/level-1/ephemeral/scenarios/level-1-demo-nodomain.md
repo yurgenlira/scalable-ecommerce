@@ -8,6 +8,7 @@ No DNS, no TLS. Simulated payment.
 make up
 EIP=$(terraform -chdir=extra/level-1/infra/envs/prod output -raw public_ip)
 echo "$EIP"
+make cost-guard ALERT_EMAIL=yurgenlira@hotmail.com   # budget + auto-stop guardrails
 ```
 
 ## 2. Deploy the app
