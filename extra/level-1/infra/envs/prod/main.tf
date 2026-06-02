@@ -25,6 +25,7 @@ module "compute" {
   source    = "../../modules/compute-ec2"
   subnet_id = module.network.subnet_id
   sg_id     = module.network.ec2_sg_id
+  domain = var.domain 
 }
 
 module "database" {
