@@ -16,6 +16,15 @@ variable "instance_type" {
   default = "t3.small"
 }
 
+variable "domain" {
+  type    = string
+  default = ""
+}
+
+locals {
+  server_name = var.domain != "" ? "${var.domain} www.${var.domain}" : "_"
+}
+
 data "aws_ssm_parameter" "ubuntu" {
   name = "/aws/service/canonical/ubuntu/server/24.04/stable/current/amd64/hvm/ebs-gp3/ami-id"
 }
@@ -54,7 +63,7 @@ resource "aws_instance" "this" {
   vpc_security_group_ids = [var.sg_id]
   iam_instance_profile   = aws_iam_instance_profile.ec2.name
   user_data = templatefile("${path.module}/../../../deploy/ec2/cloud-init.yaml", {
-    nginx_conf_b64 = base64encode(file("${path.module}/../../../deploy/ec2/nginx.conf"))
+    nginx_conf_b64 = base64encode(templatefile("${path.module}/../../../deploy/ec2/nginx.conf", { server_name = local.server_name }))
     cw_agent_b64   = base64encode(file("${path.module}/../../../deploy/ec2/cloudwatch-agent.json"))
   })
   tags                   = { Name = var.name }

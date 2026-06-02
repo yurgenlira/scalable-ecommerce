@@ -36,4 +36,10 @@ php artisan db:seed --force
 php artisan config:cache
 chown -R www-data:www-data storage bootstrap/cache
 systemctl reload php8.5-fpm
-curl -fsS --resolve jlira.dev:443:127.0.0.1 https://jlira.dev/up > /dev/null
+# health-check the TLS vhost if a cert exists, else plain HTTP (no-domain mode)
+if [ -d /etc/letsencrypt/live ]; then
+  domain=$(ls /etc/letsencrypt/live | head -1)
+  curl -fsS --resolve "$domain:443:127.0.0.1" "https://$domain/up" > /dev/null
+else
+  curl -fsS http://localhost/up > /dev/null
+fi

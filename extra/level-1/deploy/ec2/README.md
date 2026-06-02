@@ -5,6 +5,16 @@ The app is deployed to the EC2 instance via SSM Run Command (no SSH) by the
 under `/var/www/scalable-ecommerce`, builds `.env` from SSM Parameter Store,
 runs migrations and reloads PHP-FPM.
 
+## Modes
+
+Two serving modes via the `domain` variable (default: no-domain):
+
+- **No-domain (default)** — `make up`: serves HTTP on the Elastic IP, no DNS or
+  Certbot. Access: `http://<EIP>/up`. Fast for iteration.
+- **Domain + HTTPS** — `terraform apply -var="domain=jlira.dev"`: sets the Nginx
+  `server_name`; then point the A records to the EIP and issue the cert with
+  Certbot (see Sprint 1.3). Access: `https://jlira.dev/up`.
+
 ## DNS (Namecheap)
 
 The domain lives in Namecheap, not Route 53. Point it to the Elastic IP:
