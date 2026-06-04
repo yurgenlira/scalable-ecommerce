@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Product;
+use App\Modules\Catalog\Domain\Models\Product;
 
 it('lists products paginated', function () {
     Product::factory()->count(3)->create();

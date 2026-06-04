@@ -1,7 +1,7 @@
 <?php
 
-use App\Models\Product;
-use App\Models\User;
+use App\Modules\Catalog\Domain\Models\Product;
+use App\Modules\Identity\Domain\Models\User;
 use Laravel\Sanctum\Sanctum;
 
 it('adds an item and recalculates the total', function () {
