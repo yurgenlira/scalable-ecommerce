@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\User;
+use App\Modules\Identity\Domain\Models\User;
 
 it('registers a user and returns a token', function () {
     $this->postJson('/api/register', [
