@@ -4,6 +4,7 @@ use App\Modules\Cart\Providers\CartServiceProvider;
 use App\Modules\Catalog\Providers\CatalogServiceProvider;
 use App\Modules\Identity\Providers\IdentityServiceProvider;
 use App\Modules\Ordering\Providers\OrderingServiceProvider;
+use App\Modules\Payment\Providers\PaymentServiceProvider;
 use App\Providers\AppServiceProvider;
 
 return [
@@ -12,5 +13,5 @@ return [
     CatalogServiceProvider::class,
     CartServiceProvider::class,
     OrderingServiceProvider::class,
-    App\Modules\Payment\Providers\PaymentServiceProvider::class,
+    PaymentServiceProvider::class,
 ];
