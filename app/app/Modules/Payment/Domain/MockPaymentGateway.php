@@ -2,13 +2,12 @@
 
 namespace App\Modules\Payment\Domain;
 
-use App\Modules\Ordering\Domain\Models\Order;
 use App\Modules\Payment\Contracts\PaymentGateway;
 use Illuminate\Support\Str;
 
 class MockPaymentGateway implements PaymentGateway
 {
-    public function charge(Order $order): PaymentResult
+    public function charge(int $amountCents): PaymentResult
     {
         $config = config('services.payment.mock');
 
@@ -17,7 +16,7 @@ class MockPaymentGateway implements PaymentGateway
         }
 
         $declineOver = $config['decline_over_cents'];
-        $approved = $declineOver === null || $order->total_cents <= $declineOver;
+        $approved = $declineOver === null || $amountCents <= $declineOver;
 
         return new PaymentResult(
             approved: $approved,

@@ -3,6 +3,9 @@
 namespace App\Modules\Ordering\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Modules\Cart\Contracts\CartContract;
+use App\Modules\Catalog\Contracts\CatalogContract;
+use App\Modules\Ordering\Domain\Models\Order;
 use App\Modules\Payment\Contracts\PaymentGateway;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -11,45 +14,54 @@ use Illuminate\Validation\ValidationException;
 
 class CheckoutController extends Controller
 {
-    public function store(Request $request, PaymentGateway $gateway): JsonResponse
-    {
-        $cart = $request->user()->cart()->with('items.product')->first();
+    public function __construct(
+        private readonly CartContract $cart,
+        private readonly CatalogContract $catalog,
+        private readonly PaymentGateway $payment,
+    ) {}
 
-        if (! $cart || $cart->items->isEmpty()) {
+    public function store(Request $request): JsonResponse
+    {
+        $userId = $request->user()->id;
+        $cart = $this->cart->forUser($userId);
+
+        if ($cart->items === []) {
             throw ValidationException::withMessages(['cart' => ['Cart is empty.']]);
         }
 
-        $order = DB::transaction(function () use ($request, $cart, $gateway) {
+        $order = DB::transaction(function () use ($userId, $cart): Order {
+            $order = Order::create(['user_id' => $userId, 'status' => 'pending', 'total_cents' => 0]);
+
+            $totalCents = 0;
             foreach ($cart->items as $item) {
-                if ($item->quantity > $item->product->stock) {
-                    throw ValidationException::withMessages(['stock' => ["Not enough stock for {$item->product->name}."]]);
+                $product = $this->catalog->find($item->productId);
+                if ($product === null) {
+                    throw ValidationException::withMessages(['cart' => ['Product not available.']]);
                 }
-            }
+                if ($item->quantity > $product->stock) {
+                    throw ValidationException::withMessages(['stock' => ["Not enough stock for {$product->name}."]]);
+                }
 
-            $order = $request->user()->orders()->create([
-                'status' => 'pending',
-                'total_cents' => $cart->totalCents(),
-            ]);
-
-            foreach ($cart->items as $item) {
                 $order->items()->create([
-                    'product_id' => $item->product_id,
+                    'product_id' => $product->id,
                     'quantity' => $item->quantity,
-                    'unit_price_cents' => $item->product->price_cents,
+                    'unit_price_cents' => $product->priceCents,
                 ]);
+                $totalCents += $product->priceCents * $item->quantity;
             }
 
-            $result = $gateway->charge($order);
+            $result = $this->payment->charge($totalCents);
 
             if ($result->approved) {
                 foreach ($cart->items as $item) {
-                    $item->product->decrement('stock', $item->quantity);
+                    $this->catalog->decrementStock($item->productId, $item->quantity);
                 }
-                $cart->items()->delete();
+                $this->cart->clear($userId);
             }
 
             $order->update([
                 'status' => $result->approved ? 'paid' : 'payment_failed',
+                'total_cents' => $totalCents,
                 'payment_reference' => $result->reference,
             ]);
 

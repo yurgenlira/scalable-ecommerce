@@ -3,31 +3,38 @@
 namespace App\Modules\Cart\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Modules\Cart\Domain\Models\Cart;
 use App\Modules\Cart\Domain\Models\CartItem;
-use App\Modules\Catalog\Domain\Models\Product;
+use App\Modules\Catalog\Contracts\CatalogContract;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
 class CartController extends Controller
 {
+    public function __construct(private readonly CatalogContract $catalog) {}
+
     public function show(Request $request): JsonResponse
     {
-        $cart = $request->user()->cart()->firstOrCreate([]);
-        $cart->load('items.product');
+        $cart = Cart::firstOrCreate(['user_id' => $request->user()->id]);
+        $cart->load('items');
 
-        return response()->json(['items' => $cart->items, 'total_cents' => $cart->totalCents()]);
+        return response()->json(['items' => $cart->items, 'total_cents' => $this->totalCents($cart)]);
     }
 
     public function addItem(Request $request): JsonResponse
     {
         $data = $request->validate([
-            'product_id' => ['required', 'exists:products,id'],
+            'product_id' => ['required', 'integer'],
             'quantity' => ['required', 'integer', 'min:1'],
         ]);
 
-        $product = Product::findOrFail($data['product_id']);
-        $cart = $request->user()->cart()->firstOrCreate([]);
+        $product = $this->catalog->find($data['product_id']);
+        if ($product === null) {
+            throw ValidationException::withMessages(['product_id' => ['Product not found.']]);
+        }
+
+        $cart = Cart::firstOrCreate(['user_id' => $request->user()->id]);
         $item = $cart->items()->firstOrNew(['product_id' => $product->id]);
         $desired = ($item->quantity ?? 0) + $data['quantity'];
 
@@ -38,7 +45,7 @@ class CartController extends Controller
         $item->quantity = $desired;
         $item->save();
 
-        return response()->json(['total_cents' => $cart->fresh()->totalCents()], 201);
+        return response()->json(['total_cents' => $this->totalCents($cart->fresh())], 201);
     }
 
     public function removeItem(Request $request, CartItem $item): JsonResponse
@@ -47,5 +54,12 @@ class CartController extends Controller
         $item->delete();
 
         return response()->json(['status' => 'removed']);
+    }
+
+    private function totalCents(Cart $cart): int
+    {
+        return $cart->items->sum(
+            fn (CartItem $item) => $item->quantity * ($this->catalog->find($item->product_id)?->priceCents ?? 0)
+        );
     }
 }
