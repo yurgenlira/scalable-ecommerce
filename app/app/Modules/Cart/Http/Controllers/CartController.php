@@ -58,8 +58,10 @@ class CartController extends Controller
 
     private function totalCents(Cart $cart): int
     {
-        return $cart->items->sum(
-            fn (CartItem $item) => $item->quantity * ($this->catalog->find($item->product_id)?->priceCents ?? 0)
-        );
+        return $cart->items->sum(function (CartItem $item): int {
+            $product = $this->catalog->find($item->product_id);
+
+            return $product === null ? 0 : $item->quantity * $product->priceCents;
+        });
     }
 }

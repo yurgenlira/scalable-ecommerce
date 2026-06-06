@@ -2,5 +2,11 @@ includes:
     - vendor/larastan/larastan/extension.neon
 parameters:
     level: 6
-    paths:
+    paths: 
         - app
+    databaseMigrationsPath:
+        - database/migrations
+        - app/Modules/Catalog/Database/migrations
+        - app/Modules/Cart/Database/migrations
+        - app/Modules/Ordering/Database/migrations
+        - app/Modules/Identity/Database/migrations
