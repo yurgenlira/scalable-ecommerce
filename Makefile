@@ -1,5 +1,5 @@
 .DEFAULT_GOAL := help
-.PHONY: help lint analyse test check up down plan cost-guard destroy-all demo
+.PHONY: help lint analyse test check infra-up infra-down plan cost-guard destroy-all demo up down build logs shell db
 
 RUN := cd app &&
 TF  := terraform -chdir=extra/level-1/infra/envs/prod
@@ -21,10 +21,10 @@ test: ## Run the test suite with Pest
 check: lint analyse test ## Run the full quality gate
 
 ##@ Infrastructure
-up: ## Provision the ephemeral infrastructure
+infra-up: ## Provision the ephemeral infrastructure
 	$(TF) init && $(TF) apply -auto-approve
 
-down: ## Destroy the ephemeral infrastructure
+infra-down: ## Destroy the ephemeral infrastructure
 	$(TF) destroy -auto-approve
 
 ##@ FinOps
@@ -40,3 +40,22 @@ destroy-all: ## Destroy all project resources and verify $0 cost (keeps bootstra
 ##@ Demo
 demo: ## Seed demo data on the running instance
 	bash extra/level-1/ephemeral/demo-data/seed.sh
+
+##@ Development
+up: ## Start the local stack (app + db)
+	docker compose up -d
+
+down: ## Stop and remove the stack (keeps data)
+	docker compose down
+
+build: ## Build the local dev image
+	docker compose build
+
+logs: ## Tail the stack logs
+	docker compose logs -f
+
+shell: ## Open a shell in the app container
+	docker compose exec app sh
+
+db: ## Open a psql session on the database
+	docker compose exec db psql -U app -d app
