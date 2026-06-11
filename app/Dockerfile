@@ -42,3 +42,11 @@ COPY --from=composer-deps /app ./
 RUN chown -R www-data:www-data storage bootstrap/cache
 USER www-data
 HEALTHCHECK --interval=30s --timeout=3s CMD curl -fsS http://localhost:8080/up || exit 1
+
+# ----------------------------------------------------------
+# Stage: dev (tooling; source and vendor via bind-mount)
+# ----------------------------------------------------------
+FROM base AS dev
+
+COPY --from=composer-deps /usr/bin/composer /usr/bin/composer
+COPY docker/php-fpm.dev.conf /usr/local/etc/php-fpm.d/99-dev.conf
