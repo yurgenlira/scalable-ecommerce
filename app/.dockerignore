@@ -1,6 +1,33 @@
+# VCS
 .git
+.gitignore
+.gitattributes
+
+# Env & secrets
 .env
+.env.*
+
+# Dependencies
 vendor
+node_modules
+
+# Tests & static analysis
 tests
+phpunit.xml
+phpstan.neon
+
+# Frontend tooling
+package.json
+package-lock.json
+vite.config.js
+.npmrc
+
+# Build files & docs
+Dockerfile
+.dockerignore
+README.md
+.editorconfig
+
+# Runtime-generated
 storage/logs/*
 storage/framework/cache/data/*
